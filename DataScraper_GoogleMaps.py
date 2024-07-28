@@ -17,7 +17,7 @@ def create_excel_file(data, filename):
         sheet = workbook.active
 
         # Write headers
-        headers = ["Name", "Address", "Email", "Website"]
+        headers = ["Name", "Address", "Email", "Phone Number", "Website"]
         sheet.append(headers)
 
         # Write data
@@ -44,15 +44,25 @@ def get_places(api_key, query, location, min_count):
                 name = place.get('name')
                 address = place.get('formatted_address')
                 email = ""
-                website = place.get('website', "")
-                
+                phone_number = ""
+                website = ""
+
                 # Use place_id to get more details
                 place_details = gmaps.place(place_id=place['place_id'])
                 if place_details.get('result'):
                     email = place_details['result'].get('email', "")
+                    phone_number = place_details['result'].get('formatted_phone_number', "")
                     website = place_details['result'].get('website', "")
                 
-                places.append([name, address, email, website])
+                places.append([name, address, email, phone_number, website])
+
+                # Display progress and details in the terminal
+                console.log(f"Name: [bold blue]{name}[/bold blue]")
+                console.log(f"Address: [bold blue]{address}[/bold blue]")
+                console.log(f"Email: [bold blue]{email}[/bold blue]")
+                console.log(f"Phone Number: [bold blue]{phone_number}[/bold blue]")
+                console.log(f"Website: [bold blue]{website}[/bold blue]")
+                console.log("-" * 40)  # Separator line for readability
 
                 # Display progress
                 elapsed_time = time.time() - start_time
